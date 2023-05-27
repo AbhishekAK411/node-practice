@@ -5,7 +5,7 @@ import { addProduct } from "../controllers/ProdControllers.js";
 const router = express.Router();
 
 router.get('/login', login);
-router.get('/register', register);
+router.post('/register', register);
 router.post('/add-product', addProduct);
 
 
