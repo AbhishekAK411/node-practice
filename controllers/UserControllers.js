@@ -60,30 +60,45 @@ export const register = async (req,res) =>{
 }
 
 
-export const updateUser = async (req,res) => {
-    try{
-        const {userName, userEmail, userPassword, changeEmail} = req.body;
-        if(!userName) return res.send("Username is required");
-        if(!userEmail) return res.send("Email is required");
-        if(!userPassword) return res.send("Password is required");
+// export const updateUser = async (req,res) => {
+//     try{
+//         const {userName, userEmail, userPassword, changeEmail} = req.body;
+//         if(!userName) return res.send("Username is required");
+//         if(!userEmail) return res.send("Email is required");
+//         if(!userPassword) return res.send("Password is required");
 
-        const response = await users.find({email : userEmail}).exec();
+//         const response = await users.find({email : userEmail}).exec();
         
-        if(userEmail !== response[0].email){
-            return res.send("Email is not the same.");
-        } else {
-            response[0].name = userName;
-            response[0].email = changeEmail;
-            response[0].password = userPassword;
+//         if(userEmail !== response[0].email){
+//             return res.send("Email is not the same.");
+//         } else {
+//             response[0].name = userName;
+//             response[0].email = changeEmail;
+//             response[0].password = userPassword;
 
-            await users.updateOne({name:response[0].name,email:response[0].email,password: response[0].password});
+//             await users.updateOne({name:response[0].name,email:response[0].email,password: response[0].password});
 
-            return res.send("saved details successfully");
-        }
+//             return res.send("saved details successfully");
+//         }
 
 
 
-    } catch(error){
+//     } catch(error){
+//         return res.send(error);
+//     }
+// }
+
+
+export const updateUser = async(req,res) =>{
+
+     try{
+
+        const {userEmail, userName} = req.body;
+        const response = await users.findOneAndUpdate({email: userEmail}, {name:userName}).exec();
+        res.send(response);
+     } catch(error){
         return res.send(error);
-    }
+     }
+
+
 }
