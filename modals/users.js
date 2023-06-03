@@ -9,7 +9,9 @@ const user = new Schema({
     otpNumber : String,
     otpEmail : String,
     isNumberVerified : Boolean,
-    isEmailVerified : Boolean
+    isEmailVerified : Boolean,
+    otpLoginNumber : String,
+    otpLoginEmail : String
 });
 
 export default mongoose.model("Users", user);

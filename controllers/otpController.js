@@ -89,3 +89,94 @@ export const otpCheckEmail = async (req,res) =>{
         return res.send(err);
     }
 }
+
+
+export const otpLogin = async (req,res) =>{
+
+    try{
+
+        const { number } = req.body;
+        if(!number) return res.send("Number is required.");
+
+        const user = await users.find({number}).exec();
+        if(!user) return res.send("User not found.");
+
+        const userID = user[0]?._id;
+        const code = uuidv4();
+
+        const updateUser = await users.findOneAndUpdate({_id : userID}, { otpLoginNumber: code }).exec();
+
+        res.send("Check your number for OTP.");
+
+
+    } catch(err){
+        return res.send(err);
+    }
+}
+
+
+export const otpCheckLogin = async (req,res) =>{
+    
+    try{
+
+        const {number, otp} = req.body;
+        if(!number) return res.send("Number is required.");
+        if(!otp) return res.sedn("OTP is required.");
+
+        const user = await users.find({number}).exec();
+        if(user[0].otpLoginNumber == otp){
+            return res.send("Login through number is Successful.");
+        }
+        return res.send("OTP is incorrect.");
+    } catch(err){
+        return res.send(err);
+    }
+
+}
+
+
+
+export const otpLoginEmail = async (req,res) =>{
+
+    try{
+
+        const {email} = req.body;
+        if(!email) return res.send("Email is required.");
+
+        const user = await users.find({email}).exec();
+        if(!user) return res.send("User not found.");
+
+        const userID = user[0]?._id;
+        const code = uuidv4();
+
+        const updateUser = await users.findOneAndUpdate({email}, { otpLoginEmail: code }).exec();
+        
+        return res.send("Check your email for OTP.");
+    } catch(err){
+        return res.send(err);
+    }
+}
+
+
+export const otpCheckLoginEmail = async (req,res) => {
+
+    try{
+
+        const {email, otp} = req.body;
+        if(!email) return res.send("Email is required.");
+        if(!otp) return res.send("OTP is required.");
+
+        const user = await users.find({email}).exec();
+        if(user[0].otpLoginEmail == otp){
+            return res.send("Login through email is successful.");
+        }
+        return res.send("OTP is incorrect.");
+
+
+
+    } catch(err){
+        return res.send(err);
+    }
+
+
+}
